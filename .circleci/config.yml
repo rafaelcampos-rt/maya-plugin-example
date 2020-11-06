@@ -38,12 +38,12 @@ jobs:
               - C:\devkit
         - run: ls C:\devkit
         - run:
-          name: Configure project
-          shell: cmd.exe
-          command: |
-            cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
-            vcvars64.bat
-            cd C:\Users\circleci
-            mkdir maya-plugin
-            cd maya-plugin
-            "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" C:\Users\circleci\project
+            name: Configure project
+            shell: cmd.exe
+            command: |
+              cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
+              vcvars64.bat
+              cd C:\Users\circleci
+              mkdir maya-plugin
+              cd maya-plugin
+              "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" C:\Users\circleci\project
