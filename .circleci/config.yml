@@ -21,22 +21,35 @@ jobs:
         - checkout
         - restore_cache:
             keys: 
-              - maya-plugin-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
-              - maya-plugin-{{ .Branch }}
-              - maya-plugin
-        - run: choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
-        - run: ls "C:\Program Files\CMake"
-        - run: ls "C:\Program Files\CMake\bin"
+              - maya-devkit
         - run:
+            name: Install Maya DevKit
             command: |
               $ProgressPreference = "SilentlyContinue"
               Invoke-WebRequest << pipeline.parameters.maya-devkit-url >> -OutFile devkit.zip
               Expand-Archive -LiteralPath devkit.zip -DestinationPath C:\devkit
+              ls C:\devkit
+              
         - save_cache:
-            key: maya-plugin-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
+            key: maya-devkit
             paths:
               - C:\devkit
-        - run: ls C:\devkit
+              
+        - restore_cache:
+            keys: 
+              - cmake-install
+        - run: 
+            name: Install CMake
+            command: |
+              choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
+              ls "C:\Program Files\CMake"
+              ls "C:\Program Files\CMake\bin"
+              
+        - save_cache:
+            key: cmake-install
+            paths:
+              - "C:\Program Files\CMake"
+    
         - run:
             name: Configure project
             shell: cmd.exe
