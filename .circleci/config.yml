@@ -28,6 +28,7 @@ jobs:
         - run: ls "C:\Program Files\CMake\bin"
         - run:
             command: |
+              $ProgressPreference = "SilentlyContinue"
               Invoke-WebRequest << pipeline.parameters.maya-devkit-url >> -OutFile devkit.zip
               Expand-Archive -LiteralPath devkit.zip -DestinationPath C:\devkit
         - save_cache:
