@@ -6,7 +6,7 @@ parameters:
     default: "https://autodesk-adn-transfer.s3-us-west-2.amazonaws.com/ADN+Extranet/M%26E/Maya/devkit+2019/Autodesk_Maya_2019_3_Update_DEVKIT_Windows.zip"
   maya-devkit-path:
     type: string
-    default: C:\devkit
+    default: C:\\devkit
   cmake-path:
     type: string
     default: "C:\\Program Files\\CMake"
@@ -21,7 +21,7 @@ jobs:
       name: win/default # executor type
       size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
     environment:
-      DEVKIT_LOCATION: C:\devkit\devkitBase
+      DEVKIT_LOCATION: C:\\devkit\\devkitBase
     steps:
         # Commands are run in a Windows virtual machine environment
         - checkout
@@ -85,6 +85,7 @@ jobs:
                 if (-not (Get-Command cmake -ErrorAction SilentlyContinue)) {
                   New-Alias -Name cmake -Value "<< pipeline.parameters.cmake-path >>\bin\cmake.exe"
                 }
+                $env:DEVKIT_LOCATION
                 cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
         - run:
             name: Build project
