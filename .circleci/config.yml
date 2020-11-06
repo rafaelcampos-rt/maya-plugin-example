@@ -65,5 +65,5 @@ jobs:
             name: Configure project - 3
             shell: cmd.exe
             command: |
-                cd maya-plugin
+                cd C:\Users\circleci\maya-plugin
                 C:\Program Files\CMake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" C:\Users\circleci\project
