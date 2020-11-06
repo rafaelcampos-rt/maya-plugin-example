@@ -88,7 +88,7 @@ jobs:
                 cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
         - run:
             name: Build project
-            command: command: |
+            command: |
                 $vsPath = &(Join-Path ${env:ProgramFiles(x86)} "\Microsoft Visual Studio\Installer\vswhere.exe") -property installationpath
                 Import-Module (Join-Path $vsPath "Common7\Tools\Microsoft.VisualStudio.DevShell.dll")
                 Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation
