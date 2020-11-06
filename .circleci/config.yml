@@ -86,3 +86,6 @@ jobs:
                   New-Alias -Name cmake -Value "<< pipeline.parameters.cmake-path >>\bin\cmake.exe"
                 }
                 cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
+        - run:
+            name: Build project
+            command: cmake --build C:\Users\circleci\maya-plugin --target all
