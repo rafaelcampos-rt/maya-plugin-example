@@ -80,6 +80,9 @@ jobs:
                 cd C:\Users\circleci
                 mkdir maya-plugin
         - run:
-            name: Configure project - 3
-            shell: cmd.exe
-            command: "C:\\Program Files\\CMake\\bin\\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
+            name: Configure project
+            command: |
+                if (-not (Get-Command cmake -ErrorAction SilentlyContinue)) {
+                  New-Alias -Name cmake -Value "<< pipeline.parameters.cmake-path >>\bin\cmake.exe"
+                }
+                cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
