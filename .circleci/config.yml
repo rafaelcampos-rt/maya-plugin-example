@@ -9,7 +9,7 @@ parameters:
     default: C:\devkit
   cmake-path:
     type: string
-    default: "C:\Program Files\CMake"
+    default: "C:/Program Files/CMake"
 # Use a package of configuration called an orb.
 orbs:
   # Declare a dependency on the windows orb
@@ -82,4 +82,4 @@ jobs:
         - run:
             name: Configure project - 3
             shell: cmd.exe
-            command: "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
+            command: "C:/Program Files/CMake/bin/cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
