@@ -68,13 +68,9 @@ jobs:
             key: cmake-install
             paths:
               - C:\Program Files\CMake
-    
+
         - run:
-            name: Configure project - 1
-            shell: cmd.exe
-            command: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat
-        - run:
-            name: Configure project - 2
+            name: Create build directory
             shell: cmd.exe
             command: |
                 cd C:\Users\circleci
@@ -82,6 +78,10 @@ jobs:
         - run:
             name: Configure project
             command: |
+                $vsPath = &(Join-Path ${env:ProgramFiles(x86)} "\Microsoft Visual Studio\Installer\vswhere.exe") -property installationpath
+                Import-Module (Join-Path $vsPath "Common7\Tools\Microsoft.VisualStudio.DevShell.dll")
+                Enter-VsDevShell -VsInstallPath $vsPath -SkipAutomaticLocation
+
                 if (-not (Get-Command cmake -ErrorAction SilentlyContinue)) {
                   New-Alias -Name cmake -Value "<< pipeline.parameters.cmake-path >>\bin\cmake.exe"
                 }
