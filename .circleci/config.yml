@@ -4,6 +4,9 @@ parameters:
   maya-devkit-url:
     type: string
     default: "https://autodesk-adn-transfer.s3-us-west-2.amazonaws.com/ADN+Extranet/M%26E/Maya/devkit+2019/Autodesk_Maya_2019_3_Update_DEVKIT_Windows.zip"
+  maya-devkit-path:
+    type: string
+    default: C:\devkit
 # Use a package of configuration called an orb.
 orbs:
   # Declare a dependency on the windows orb
@@ -25,15 +28,21 @@ jobs:
         - run:
             name: Install Maya DevKit
             command: |
-              $ProgressPreference = "SilentlyContinue"
-              Invoke-WebRequest << pipeline.parameters.maya-devkit-url >> -OutFile devkit.zip
-              Expand-Archive -LiteralPath devkit.zip -DestinationPath C:\devkit
-              ls C:\devkit
-              
+              if (-not (Test-Path -LiteralPath $<< pipeline.parameters.maya-devkit-path >>)) {
+                $ProgressPreference = "SilentlyContinue"
+                Invoke-WebRequest << pipeline.parameters.maya-devkit-url >> -OutFile devkit.zip
+                Expand-Archive -LiteralPath devkit.zip -DestinationPath << pipeline.parameters.maya-devkit-path >>
+                ls << pipeline.parameters.maya-devkit-path >>
+                "Successfully installed Maya Dev Kit."
+              }
+              else {
+                "Maya Dev Kit was loaded from cache."
+              }
+           
         - save_cache:
             key: maya-devkit
             paths:
-              - C:\devkit
+              - << pipeline.parameters.maya-devkit-path >>
               
         - restore_cache:
             keys: 
