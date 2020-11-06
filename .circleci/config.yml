@@ -1,0 +1,37 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+parameters:
+  maya-devkit-url:
+    type: string
+    default: "https://autodesk-adn-transfer.s3-us-west-2.amazonaws.com/ADN+Extranet/M%26E/Maya/devkit+2019/Autodesk_Maya_2019_3_Update_DEVKIT_Windows.zip"
+# Use a package of configuration called an orb.
+orbs:
+  # Declare a dependency on the windows orb
+  win: circleci/windows@2.2.0
+# Orchestrate or schedule a set of jobs
+jobs:
+  build: # name of your job
+    executor:
+      name: win/default # executor type
+      size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
+
+    steps:
+        # Commands are run in a Windows virtual machine environment
+        - checkout
+        - restore_cache:
+            keys: 
+              - maya-plugin-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
+              - maya-plugin-{{ .Branch }}
+              - maya-plugin
+        - run: choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
+        - run: ls "C:\Program Files\CMake"
+        - run: ls "C:\Program Files\CMake\bin"
+        - run:
+            command: |
+              Invoke-WebRequest << pipeline.parameters.maya-devkit-url >> -OutFile devkit.zip
+              Expand-Archive -LiteralPath devkit.zip -DestinationPath C:\devkit
+        - save_cache:
+            key: maya-plugin-{{ .Branch }}-{{ checksum ".circleci/config.yml" }}
+            paths:
+              - C:\devkit
+        - run: ls C:\devkit
