@@ -38,6 +38,7 @@ jobs:
         - restore_cache:
             keys: 
               - cmake-install
+              
         - run: 
             name: Install CMake
             command: |
@@ -48,7 +49,7 @@ jobs:
         - save_cache:
             key: cmake-install
             paths:
-              - "C:\Program Files\CMake"
+              - C:\Program Files\CMake
     
         - run:
             name: Configure project
