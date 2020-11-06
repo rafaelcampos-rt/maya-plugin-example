@@ -7,6 +7,9 @@ parameters:
   maya-devkit-path:
     type: string
     default: C:\devkit
+  cmake-path:
+    type: string
+    default: C:\Program Files\CMake
 # Use a package of configuration called an orb.
 orbs:
   # Declare a dependency on the windows orb
@@ -51,10 +54,16 @@ jobs:
         - run: 
             name: Install CMake
             command: |
-              choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
+              if (-not (Test-Path -LiteralPath << pipeline.parameters.cmake-path >>)) {
+                choco install cmake -y --installargs 'ADD_CMAKE_TO_PATH=System'
+                "Successfully installed CMake."
+              }
+              else {
+                "CMake was loaded from cache."
+              }
               ls "C:\Program Files\CMake"
               ls "C:\Program Files\CMake\bin"
-              
+             
         - save_cache:
             key: cmake-install
             paths:
@@ -73,6 +82,4 @@ jobs:
         - run:
             name: Configure project - 3
             shell: cmd.exe
-            command: |
-                cd C:\Users\circleci\maya-plugin
-                C:\Program Files\CMake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" C:\Users\circleci\project
+            command: C:\Program Files\CMake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" -S C:\Users\circleci\project -B C:\Users\circleci\maya-plugin
