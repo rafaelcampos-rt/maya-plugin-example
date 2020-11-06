@@ -14,7 +14,8 @@ jobs:
     executor:
       name: win/default # executor type
       size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
-
+    environment:
+      DEVKIT_LOCATION: C:\devkit\devkitBase
     steps:
         # Commands are run in a Windows virtual machine environment
         - checkout
@@ -36,3 +37,13 @@ jobs:
             paths:
               - C:\devkit
         - run: ls C:\devkit
+        - run:
+          name: Configure project
+          shell: cmd.exe
+          command: |
+            cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
+            vcvars64.bat
+            cd C:\Users\circleci
+            mkdir maya-plugin
+            cd maya-plugin
+            "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" C:\Users\circleci\project
