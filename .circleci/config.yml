@@ -28,7 +28,7 @@ jobs:
         - run:
             name: Install Maya DevKit
             command: |
-              if (-not (Test-Path -LiteralPath $<< pipeline.parameters.maya-devkit-path >>)) {
+              if (-not (Test-Path -LiteralPath << pipeline.parameters.maya-devkit-path >>)) {
                 $ProgressPreference = "SilentlyContinue"
                 Invoke-WebRequest << pipeline.parameters.maya-devkit-url >> -OutFile devkit.zip
                 Expand-Archive -LiteralPath devkit.zip -DestinationPath << pipeline.parameters.maya-devkit-path >>
