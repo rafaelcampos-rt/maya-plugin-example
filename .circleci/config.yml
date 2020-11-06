@@ -52,12 +52,18 @@ jobs:
               - C:\Program Files\CMake
     
         - run:
-            name: Configure project
+            name: Configure project - 1
+            shell: cmd.exe
+            command: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+        - run:
+            name: Configure project - 2
             shell: cmd.exe
             command: |
-              cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
-              vcvars64.bat
-              cd C:\Users\circleci
-              mkdir maya-plugin
-              cd maya-plugin
-              "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" C:\Users\circleci\project
+                cd C:\Users\circleci
+                mkdir maya-plugin
+        - run:
+            name: Configure project - 3
+            shell: cmd.exe
+            command: |
+                cd maya-plugin
+                "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - NMake Makefiles" C:\Users\circleci\project
